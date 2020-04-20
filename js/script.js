@@ -4,20 +4,39 @@ const pokemonList = [
 //load pokemon list
 const $list = document.querySelector('.pokemon-list')
 pokemonList.forEach(pokemon => {
-    itemTemplate = `<li class="pokemon"><a href="#${pokemon}">${pokemon}</a></li>`;
+    itemTemplate = `<li class="pokemon-item"><button class="poke-button">${pokemon}</button></li>`;
     $list.insertAdjacentHTML('beforeend',  itemTemplate); 
 });
 
 // implement request
 let getExtFile = new XMLHttpRequest();
-getExtFile.open("GET", 'https://pokeapi.co/api/v2/pokemon/pikachu/');
+getExtFile.open("GET", 'https://api.pokemontcg.io/v1/cards?name=pikachu');
 getExtFile.setRequestHeader('Access-Control-Allow-Origin', '*')
 getExtFile.responseType = 'json';
 getExtFile.onreadystatechange = function () {
     if(getExtFile.status === 200) {
-        console.log(getExtFile.response)
+        console.log(getExtFile.response.cards[0])
+        loadDetails(getExtFile.response.cards[0])
     }
 };
 getExtFile.send();
 
 //load information
+function loadDetails(response) {
+    document.querySelector('.pokemon-details').style.display = 'block'
+
+    const $img = document.querySelector('.img');
+    const $name = document.querySelector('.name');
+    const $types = document.querySelector('.types');
+    const $attacks = document.querySelector('.attacks');
+
+    $img.setAttribute('src', response.imageUrl);
+    $name.textContent = response.name;
+    response.types.forEach((type)=>{
+        $types.textContent += ` ${type},`
+    })
+    response.attacks.forEach((attack) => {
+        $attacks.textContent += ` ${attack.name},`
+    })
+}
+
