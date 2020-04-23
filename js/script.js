@@ -12,8 +12,8 @@ const getPokemonInfo = () => {
     req.responseType = 'json';
     req.onreadystatechange = () => {
         if(req.status === 200) {
-            console.log(req.response.cards[0])
-            loadDetails(req.response.cards[0])
+            console.log(req.response.cards[0]);
+            loadDetails(req.response.cards[0]);
         }
     }
     req.send(); 
